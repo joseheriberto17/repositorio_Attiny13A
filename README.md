@@ -16,4 +16,12 @@ Los branches en Git deben utilizarse para separar características, correcciones
 
 Cada característica nueva o corrección de errores debería estar en su propia rama feature/ o bugfix/ y fusionarse a develop antes de ser incluida en main.
 
-dame un ejemplo
+resumen
+
+Crear una rama para la nueva característica (feature/pwm-control)
+2️⃣ Desarrollar la funcionalidad y hacer commits regularmente
+3️⃣ Subir la rama al repositorio (git push)
+4️⃣ Crear un Pull Request y fusionarlo en develop
+5️⃣ Eliminar la rama cuando ya no sea necesaria
+
+Este mismo flujo lo puedes aplicar para bugfix/, experiment/ y hotfix/.
