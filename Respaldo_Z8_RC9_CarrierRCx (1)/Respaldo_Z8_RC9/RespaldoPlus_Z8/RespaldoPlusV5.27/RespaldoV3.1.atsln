@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "RespaldoV5.24", "RespaldoV3.1\RespaldoV5.24.cproj", "{1F523B20-D10A-44A3-9884-52C75CB1F11A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F523B20-D10A-44A3-9884-52C75CB1F11A}.Debug|AVR.ActiveCfg = Debug|AVR
+		{1F523B20-D10A-44A3-9884-52C75CB1F11A}.Debug|AVR.Build.0 = Debug|AVR
+		{1F523B20-D10A-44A3-9884-52C75CB1F11A}.Release|AVR.ActiveCfg = Release|AVR
+		{1F523B20-D10A-44A3-9884-52C75CB1F11A}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

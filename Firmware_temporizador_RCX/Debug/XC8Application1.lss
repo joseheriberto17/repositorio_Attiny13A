@@ -1,0 +1,459 @@
+
+XC8Application1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000072  00000000  00000000  000000b4  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000376  2**0
+                  ALLOC, LOAD, DATA
+  2 .comment      0000002f  00000000  00000000  00000376  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000030  00000000  00000000  000003a5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000726  00000000  00000000  000003d5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000003b9  00000000  00000000  00000afb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   000002b2  00000000  00000000  00000eb4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000044  00000000  00000000  00001168  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    00000100  00000000  00000000  000011ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000090  00000000  00000000  000012ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000020  00000000  00000000  0000133c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .text         00000002  000002bc  000002bc  00000370  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 12 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000135c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .text.adc_setup 00000014  00000298  00000298  0000034c  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 14 .text.adc_read 00000010  000002ac  000002ac  00000360  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 15 .text.main    00000226  00000072  00000072  00000126  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 16 .bss.in_ignition 00000002  00800074  00800074  00000376  2**0
+                  ALLOC
+ 17 .bss.read_old 00000004  00800060  00800060  00000376  2**0
+                  ALLOC
+ 18 .bss.read     00000004  00800064  00800064  00000376  2**0
+                  ALLOC
+ 19 .bss.ignition_off 00000004  00800068  00800068  00000376  2**0
+                  ALLOC
+ 20 .bss.ignition_on 00000004  0080006c  0080006c  00000376  2**0
+                  ALLOC
+ 21 .data.timeout_off 00000004  00800070  000002be  00000372  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	5c c1       	rjmp	.+696    	; 0x2bc <__bad_interrupt>
+   4:	5b c1       	rjmp	.+694    	; 0x2bc <__bad_interrupt>
+   6:	5a c1       	rjmp	.+692    	; 0x2bc <__bad_interrupt>
+   8:	59 c1       	rjmp	.+690    	; 0x2bc <__bad_interrupt>
+   a:	58 c1       	rjmp	.+688    	; 0x2bc <__bad_interrupt>
+   c:	57 c1       	rjmp	.+686    	; 0x2bc <__bad_interrupt>
+   e:	56 c1       	rjmp	.+684    	; 0x2bc <__bad_interrupt>
+  10:	55 c1       	rjmp	.+682    	; 0x2bc <__bad_interrupt>
+  12:	54 c1       	rjmp	.+680    	; 0x2bc <__bad_interrupt>
+
+00000014 <.dinit>:
+  14:	00 60       	ori	r16, 0x00	; 0
+  16:	00 70       	andi	r16, 0x00	; 0
+  18:	80 00       	.word	0x0080	; ????
+  1a:	70 00       	.word	0x0070	; ????
+  1c:	74 00       	.word	0x0074	; ????
+  1e:	02 be       	out	0x32, r0	; 50
+  20:	00 74       	andi	r16, 0x40	; 64
+  22:	00 76       	andi	r16, 0x60	; 96
+  24:	80 00       	.word	0x0080	; ????
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e9       	ldi	r28, 0x9F	; 159
+  2c:	cd bf       	out	0x3d, r28	; 61
+
+0000002e <__do_copy_data>:
+  2e:	e4 e1       	ldi	r30, 0x14	; 20
+  30:	f0 e0       	ldi	r31, 0x00	; 0
+  32:	40 e0       	ldi	r20, 0x00	; 0
+  34:	17 c0       	rjmp	.+46     	; 0x64 <__do_clear_bss+0x8>
+  36:	b5 91       	lpm	r27, Z+
+  38:	a5 91       	lpm	r26, Z+
+  3a:	35 91       	lpm	r19, Z+
+  3c:	25 91       	lpm	r18, Z+
+  3e:	05 91       	lpm	r16, Z+
+  40:	07 fd       	sbrc	r16, 7
+  42:	0c c0       	rjmp	.+24     	; 0x5c <__do_clear_bss>
+  44:	95 91       	lpm	r25, Z+
+  46:	85 91       	lpm	r24, Z+
+  48:	ef 01       	movw	r28, r30
+  4a:	f9 2f       	mov	r31, r25
+  4c:	e8 2f       	mov	r30, r24
+  4e:	05 90       	lpm	r0, Z+
+  50:	0d 92       	st	X+, r0
+  52:	a2 17       	cp	r26, r18
+  54:	b3 07       	cpc	r27, r19
+  56:	d9 f7       	brne	.-10     	; 0x4e <__DATA_REGION_LENGTH__+0xe>
+  58:	fe 01       	movw	r30, r28
+  5a:	04 c0       	rjmp	.+8      	; 0x64 <__do_clear_bss+0x8>
+
+0000005c <__do_clear_bss>:
+  5c:	1d 92       	st	X+, r1
+  5e:	a2 17       	cp	r26, r18
+  60:	b3 07       	cpc	r27, r19
+  62:	e1 f7       	brne	.-8      	; 0x5c <__do_clear_bss>
+  64:	e5 32       	cpi	r30, 0x25	; 37
+  66:	f4 07       	cpc	r31, r20
+  68:	31 f7       	brne	.-52     	; 0x36 <__do_copy_data+0x8>
+  6a:	03 d0       	rcall	.+6      	; 0x72 <_etext>
+  6c:	00 c0       	rjmp	.+0      	; 0x6e <_exit>
+
+0000006e <_exit>:
+  6e:	f8 94       	cli
+
+00000070 <__stop_program>:
+  70:	ff cf       	rjmp	.-2      	; 0x70 <__stop_program>
+
+Disassembly of section .text:
+
+000002bc <__bad_interrupt>:
+ 2bc:	a1 ce       	rjmp	.-702    	; 0x0 <__TEXT_REGION_ORIGIN__>
+
+Disassembly of section .text.adc_setup:
+
+00000298 <adc_setup>:
+#define VOLT_OUT PB1 
+
+
+void adc_setup(void) {
+    // Set the ADC input to PB2/ADC1
+    ADMUX |= (1 << MUX0);
+ 298:	87 b1       	in	r24, 0x07	; 7
+ 29a:	81 60       	ori	r24, 0x01	; 1
+ 29c:	87 b9       	out	0x07, r24	; 7
+    ADMUX |= (1 << ADLAR);
+ 29e:	87 b1       	in	r24, 0x07	; 7
+ 2a0:	80 62       	ori	r24, 0x20	; 32
+ 2a2:	87 b9       	out	0x07, r24	; 7
+    // Set the prescaler to clock/128 & enable ADC
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (0 << ADPS0) | (1 << ADEN);
+ 2a4:	86 b1       	in	r24, 0x06	; 6
+ 2a6:	86 68       	ori	r24, 0x86	; 134
+ 2a8:	86 b9       	out	0x06, r24	; 6
+ 2aa:	08 95       	ret
+
+Disassembly of section .text.adc_read:
+
+000002ac <adc_read>:
+}
+
+int adc_read(void) {
+    // Start the conversion
+    ADCSRA |= (1 << ADSC);
+ 2ac:	86 b1       	in	r24, 0x06	; 6
+ 2ae:	80 64       	ori	r24, 0x40	; 64
+ 2b0:	86 b9       	out	0x06, r24	; 6
+    // Wait for it to finish
+    while (ADCSRA & (1 << ADSC));
+ 2b2:	36 99       	sbic	0x06, 6	; 6
+ 2b4:	fe cf       	rjmp	.-4      	; 0x2b2 <adc_read+0x6>
+    return ADCH;
+ 2b6:	85 b1       	in	r24, 0x05	; 5
+}
+ 2b8:	90 e0       	ldi	r25, 0x00	; 0
+ 2ba:	08 95       	ret
+
+Disassembly of section .text.main:
+
+00000072 <main>:
+
+//int out_voltaje = 0;
+
+int main(void) {
+    //****************************************************************************
+    ignition_on = 0;
+  72:	10 92 6c 00 	sts	0x006C, r1	; 0x80006c <ignition_on>
+  76:	10 92 6d 00 	sts	0x006D, r1	; 0x80006d <ignition_on+0x1>
+  7a:	10 92 6e 00 	sts	0x006E, r1	; 0x80006e <ignition_on+0x2>
+  7e:	10 92 6f 00 	sts	0x006F, r1	; 0x80006f <ignition_on+0x3>
+   // out_voltaje = 0;
+    PORTB = 0x00;
+  82:	18 ba       	out	0x18, r1	; 24
+    DDRB = 0x0A; // SALIDAS PORTB3 (LED) Y PORTB1 CONMUTACION VOLTAJE
+  84:	8a e0       	ldi	r24, 0x0A	; 10
+  86:	87 bb       	out	0x17, r24	; 23
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  88:	2f ef       	ldi	r18, 0xFF	; 255
+  8a:	87 e9       	ldi	r24, 0x97	; 151
+  8c:	9a e3       	ldi	r25, 0x3A	; 58
+  8e:	21 50       	subi	r18, 0x01	; 1
+  90:	80 40       	sbci	r24, 0x00	; 0
+  92:	90 40       	sbci	r25, 0x00	; 0
+  94:	e1 f7       	brne	.-8      	; 0x8e <main+0x1c>
+  96:	00 c0       	rjmp	.+0      	; 0x98 <main+0x26>
+  98:	00 00       	nop
+    _delay_ms(2000);
+    adc_setup();
+  9a:	fe d0       	rcall	.+508    	; 0x298 <adc_setup>
+  9c:	09 c0       	rjmp	.+18     	; 0xb0 <__stack+0x11>
+  9e:	2f ef       	ldi	r18, 0xFF	; 255
+  a0:	8b e4       	ldi	r24, 0x4B	; 75
+  a2:	9d e1       	ldi	r25, 0x1D	; 29
+  a4:	21 50       	subi	r18, 0x01	; 1
+  a6:	80 40       	sbci	r24, 0x00	; 0
+  a8:	90 40       	sbci	r25, 0x00	; 0
+  aa:	e1 f7       	brne	.-8      	; 0xa4 <__stack+0x5>
+  ac:	00 c0       	rjmp	.+0      	; 0xae <__stack+0xf>
+  ae:	00 00       	nop
+    //****************************************************************************    
+    while (1) //CICLO INFINITO DE PROGRAMA
+    {
+        //in_ignition = (PINB & 0X01);
+
+        while (adc_read() < 36 )//|| in_ignition == 1) // SE QUEDA ESPERANDO HASTA QUE EL VOLTAJE SEA SUPERIOR AL VOLTAJE DE REFERENCIA //33
+  b0:	fd d0       	rcall	.+506    	; 0x2ac <adc_read>
+  b2:	84 97       	sbiw	r24, 0x24	; 36
+  b4:	a4 f3       	brlt	.-24     	; 0x9e <main+0x2c>
+           // in_ignition = (PINB & 0X01);
+            _delay_ms(1000);
+        }
+        //****************************************************************************
+        //****************************************************************************
+        ignition_on = REST;
+  b6:	80 e6       	ldi	r24, 0x60	; 96
+  b8:	9d e3       	ldi	r25, 0x3D	; 61
+  ba:	a8 e0       	ldi	r26, 0x08	; 8
+  bc:	b0 e0       	ldi	r27, 0x00	; 0
+  be:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <ignition_on>
+  c2:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <ignition_on+0x1>
+  c6:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <ignition_on+0x2>
+  ca:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <ignition_on+0x3>
+        ignition_off = TIME;
+  ce:	88 ec       	ldi	r24, 0xC8	; 200
+  d0:	9f ea       	ldi	r25, 0xAF	; 175
+  d2:	a0 e0       	ldi	r26, 0x00	; 0
+  d4:	b0 e0       	ldi	r27, 0x00	; 0
+  d6:	80 93 68 00 	sts	0x0068, r24	; 0x800068 <ignition_off>
+  da:	90 93 69 00 	sts	0x0069, r25	; 0x800069 <ignition_off+0x1>
+  de:	a0 93 6a 00 	sts	0x006A, r26	; 0x80006a <ignition_off+0x2>
+  e2:	b0 93 6b 00 	sts	0x006B, r27	; 0x80006b <ignition_off+0x3>
+        timeout_off = TIME;
+  e6:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <timeout_off>
+  ea:	90 93 71 00 	sts	0x0071, r25	; 0x800071 <timeout_off+0x1>
+  ee:	a0 93 72 00 	sts	0x0072, r26	; 0x800072 <timeout_off+0x2>
+  f2:	b0 93 73 00 	sts	0x0073, r27	; 0x800073 <timeout_off+0x3>
+        while (timeout_off >= 1) 
+  f6:	bb c0       	rjmp	.+374    	; 0x26e <__stack+0x1cf>
+        {           
+            read_old = read; //LLEVA LECTURA AL ESTADO ANTERIOR
+  f8:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <read>
+  fc:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <read+0x1>
+ 100:	a0 91 66 00 	lds	r26, 0x0066	; 0x800066 <read+0x2>
+ 104:	b0 91 67 00 	lds	r27, 0x0067	; 0x800067 <read+0x3>
+ 108:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 10c:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 110:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 114:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+            read = adc_read(); // ACTUALIZA NUEVO VALOR DE LECTURA
+ 118:	c9 d0       	rcall	.+402    	; 0x2ac <adc_read>
+ 11a:	09 2e       	mov	r0, r25
+ 11c:	00 0c       	add	r0, r0
+ 11e:	aa 0b       	sbc	r26, r26
+ 120:	bb 0b       	sbc	r27, r27
+ 122:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <read>
+ 126:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <read+0x1>
+ 12a:	a0 93 66 00 	sts	0x0066, r26	; 0x800066 <read+0x2>
+ 12e:	b0 93 67 00 	sts	0x0067, r27	; 0x800067 <read+0x3>
+
+            if ((read > 33) && (read_old > 33)) // SI EL ESTADO ACTUAL Y EL ANTERIOR SON MAYORES A LA REFERENCIA ACTUALIZA TIMEOUT //30
+ 132:	82 97       	sbiw	r24, 0x22	; 34
+ 134:	a1 05       	cpc	r26, r1
+ 136:	b1 05       	cpc	r27, r1
+ 138:	0c f4       	brge	.+2      	; 0x13c <__stack+0x9d>
+ 13a:	86 c0       	rjmp	.+268    	; 0x248 <__stack+0x1a9>
+ 13c:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 140:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 144:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 148:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+ 14c:	82 97       	sbiw	r24, 0x22	; 34
+ 14e:	a1 05       	cpc	r26, r1
+ 150:	b1 05       	cpc	r27, r1
+ 152:	0c f4       	brge	.+2      	; 0x156 <__stack+0xb7>
+ 154:	79 c0       	rjmp	.+242    	; 0x248 <__stack+0x1a9>
+            {
+                in_ignition = (PINB & 0X01);
+ 156:	86 b3       	in	r24, 0x16	; 22
+ 158:	81 70       	andi	r24, 0x01	; 1
+ 15a:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <in_ignition>
+ 15e:	10 92 75 00 	sts	0x0075, r1	; 0x800075 <in_ignition+0x1>
+                PORTB |= (1 << VOLT_OUT);
+ 162:	88 b3       	in	r24, 0x18	; 24
+ 164:	82 60       	ori	r24, 0x02	; 2
+ 166:	88 bb       	out	0x18, r24	; 24
+                if (in_ignition == 0) // SI IGNITION ESTA ACTIVA VERIFICA QUE PERMANEZCA ACTIVA POR 5 SEGUNDOS 
+ 168:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <in_ignition>
+ 16c:	90 91 75 00 	lds	r25, 0x0075	; 0x800075 <in_ignition+0x1>
+ 170:	89 2b       	or	r24, r25
+ 172:	09 f0       	breq	.+2      	; 0x176 <__stack+0xd7>
+ 174:	41 c0       	rjmp	.+130    	; 0x1f8 <__stack+0x159>
+                {
+                    ignition_off = TIME;
+ 176:	88 ec       	ldi	r24, 0xC8	; 200
+ 178:	9f ea       	ldi	r25, 0xAF	; 175
+ 17a:	a0 e0       	ldi	r26, 0x00	; 0
+ 17c:	b0 e0       	ldi	r27, 0x00	; 0
+ 17e:	80 93 68 00 	sts	0x0068, r24	; 0x800068 <ignition_off>
+ 182:	90 93 69 00 	sts	0x0069, r25	; 0x800069 <ignition_off+0x1>
+ 186:	a0 93 6a 00 	sts	0x006A, r26	; 0x80006a <ignition_off+0x2>
+ 18a:	b0 93 6b 00 	sts	0x006B, r27	; 0x80006b <ignition_off+0x3>
+                    if (ignition_on < 495000)  //&& (out_voltaje == 0xFF))
+ 18e:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <ignition_on>
+ 192:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <ignition_on+0x1>
+ 196:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <ignition_on+0x2>
+ 19a:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <ignition_on+0x3>
+ 19e:	88 39       	cpi	r24, 0x98	; 152
+ 1a0:	9d 48       	sbci	r25, 0x8D	; 141
+ 1a2:	a7 40       	sbci	r26, 0x07	; 7
+ 1a4:	b1 05       	cpc	r27, r1
+ 1a6:	1c f4       	brge	.+6      	; 0x1ae <__stack+0x10f>
+                    {
+                        PORTB |= (1 << LED_IGN);
+ 1a8:	88 b3       	in	r24, 0x18	; 24
+ 1aa:	88 60       	ori	r24, 0x08	; 8
+ 1ac:	88 bb       	out	0x18, r24	; 24
+                    }
+                    if (ignition_on == 0) 
+ 1ae:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <ignition_on>
+ 1b2:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <ignition_on+0x1>
+ 1b6:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <ignition_on+0x2>
+ 1ba:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <ignition_on+0x3>
+ 1be:	00 97       	sbiw	r24, 0x00	; 0
+ 1c0:	a1 05       	cpc	r26, r1
+ 1c2:	b1 05       	cpc	r27, r1
+ 1c4:	69 f4       	brne	.+26     	; 0x1e0 <__stack+0x141>
+                    {
+                        timeout_off = TIME;
+ 1c6:	88 ec       	ldi	r24, 0xC8	; 200
+ 1c8:	9f ea       	ldi	r25, 0xAF	; 175
+ 1ca:	a0 e0       	ldi	r26, 0x00	; 0
+ 1cc:	b0 e0       	ldi	r27, 0x00	; 0
+ 1ce:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <timeout_off>
+ 1d2:	90 93 71 00 	sts	0x0071, r25	; 0x800071 <timeout_off+0x1>
+ 1d6:	a0 93 72 00 	sts	0x0072, r26	; 0x800072 <timeout_off+0x2>
+ 1da:	b0 93 73 00 	sts	0x0073, r27	; 0x800073 <timeout_off+0x3>
+ 1de:	47 c0       	rjmp	.+142    	; 0x26e <__stack+0x1cf>
+                        //PORTB |= (1 << VOLT_OUT);
+                        //out_voltaje = 0xFF;
+                    }
+                    else 
+                    {
+                        ignition_on--;
+ 1e0:	01 97       	sbiw	r24, 0x01	; 1
+ 1e2:	a1 09       	sbc	r26, r1
+ 1e4:	b1 09       	sbc	r27, r1
+ 1e6:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <ignition_on>
+ 1ea:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <ignition_on+0x1>
+ 1ee:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <ignition_on+0x2>
+ 1f2:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <ignition_on+0x3>
+ 1f6:	3b c0       	rjmp	.+118    	; 0x26e <__stack+0x1cf>
+                    }
+                }
+                else 
+                {
+                    ignition_on = REST;
+ 1f8:	80 e6       	ldi	r24, 0x60	; 96
+ 1fa:	9d e3       	ldi	r25, 0x3D	; 61
+ 1fc:	a8 e0       	ldi	r26, 0x08	; 8
+ 1fe:	b0 e0       	ldi	r27, 0x00	; 0
+ 200:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <ignition_on>
+ 204:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <ignition_on+0x1>
+ 208:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <ignition_on+0x2>
+ 20c:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <ignition_on+0x3>
+                    if (ignition_off == 0)
+ 210:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <ignition_off>
+ 214:	90 91 69 00 	lds	r25, 0x0069	; 0x800069 <ignition_off+0x1>
+ 218:	a0 91 6a 00 	lds	r26, 0x006A	; 0x80006a <ignition_off+0x2>
+ 21c:	b0 91 6b 00 	lds	r27, 0x006B	; 0x80006b <ignition_off+0x3>
+ 220:	00 97       	sbiw	r24, 0x00	; 0
+ 222:	a1 05       	cpc	r26, r1
+ 224:	b1 05       	cpc	r27, r1
+ 226:	21 f4       	brne	.+8      	; 0x230 <__stack+0x191>
+                    {
+                        PORTB &= ~(1 << LED_IGN);
+ 228:	88 b3       	in	r24, 0x18	; 24
+ 22a:	87 7f       	andi	r24, 0xF7	; 247
+ 22c:	88 bb       	out	0x18, r24	; 24
+ 22e:	1f c0       	rjmp	.+62     	; 0x26e <__stack+0x1cf>
+                    }
+                    else
+                    {
+                        ignition_off--;
+ 230:	01 97       	sbiw	r24, 0x01	; 1
+ 232:	a1 09       	sbc	r26, r1
+ 234:	b1 09       	sbc	r27, r1
+ 236:	80 93 68 00 	sts	0x0068, r24	; 0x800068 <ignition_off>
+ 23a:	90 93 69 00 	sts	0x0069, r25	; 0x800069 <ignition_off+0x1>
+ 23e:	a0 93 6a 00 	sts	0x006A, r26	; 0x80006a <ignition_off+0x2>
+ 242:	b0 93 6b 00 	sts	0x006B, r27	; 0x80006b <ignition_off+0x3>
+ 246:	13 c0       	rjmp	.+38     	; 0x26e <__stack+0x1cf>
+                    }
+                }
+            }
+            else
+            {
+                timeout_off--;
+ 248:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <timeout_off>
+ 24c:	90 91 71 00 	lds	r25, 0x0071	; 0x800071 <timeout_off+0x1>
+ 250:	a0 91 72 00 	lds	r26, 0x0072	; 0x800072 <timeout_off+0x2>
+ 254:	b0 91 73 00 	lds	r27, 0x0073	; 0x800073 <timeout_off+0x3>
+ 258:	01 97       	sbiw	r24, 0x01	; 1
+ 25a:	a1 09       	sbc	r26, r1
+ 25c:	b1 09       	sbc	r27, r1
+ 25e:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <timeout_off>
+ 262:	90 93 71 00 	sts	0x0071, r25	; 0x800071 <timeout_off+0x1>
+ 266:	a0 93 72 00 	sts	0x0072, r26	; 0x800072 <timeout_off+0x2>
+ 26a:	b0 93 73 00 	sts	0x0073, r27	; 0x800073 <timeout_off+0x3>
+        //****************************************************************************
+        //****************************************************************************
+        ignition_on = REST;
+        ignition_off = TIME;
+        timeout_off = TIME;
+        while (timeout_off >= 1) 
+ 26e:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <timeout_off>
+ 272:	90 91 71 00 	lds	r25, 0x0071	; 0x800071 <timeout_off+0x1>
+ 276:	a0 91 72 00 	lds	r26, 0x0072	; 0x800072 <timeout_off+0x2>
+ 27a:	b0 91 73 00 	lds	r27, 0x0073	; 0x800073 <timeout_off+0x3>
+ 27e:	18 16       	cp	r1, r24
+ 280:	19 06       	cpc	r1, r25
+ 282:	1a 06       	cpc	r1, r26
+ 284:	1b 06       	cpc	r1, r27
+ 286:	0c f4       	brge	.+2      	; 0x28a <__stack+0x1eb>
+ 288:	37 cf       	rjmp	.-402    	; 0xf8 <__stack+0x59>
+            else
+            {
+                timeout_off--;
+            }
+        }
+        PORTB &= ~(1 << LED_IGN);
+ 28a:	88 b3       	in	r24, 0x18	; 24
+ 28c:	87 7f       	andi	r24, 0xF7	; 247
+ 28e:	88 bb       	out	0x18, r24	; 24
+        PORTB &= ~(1 << VOLT_OUT);
+ 290:	88 b3       	in	r24, 0x18	; 24
+ 292:	8d 7f       	andi	r24, 0xFD	; 253
+ 294:	88 bb       	out	0x18, r24	; 24
+        //out_voltaje = 0;
+    }
+ 296:	0c cf       	rjmp	.-488    	; 0xb0 <__stack+0x11>

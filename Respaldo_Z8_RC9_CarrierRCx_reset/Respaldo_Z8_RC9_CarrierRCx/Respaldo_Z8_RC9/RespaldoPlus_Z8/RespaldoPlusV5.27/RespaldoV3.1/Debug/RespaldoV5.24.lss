@@ -1,0 +1,445 @@
+
+RespaldoV5.24.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000252  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  00800060  00000252  000002e6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000000c  00800064  00800064  000002ea  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000002ea  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000031c  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000030  00000000  00000000  00000358  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000588  00000000  00000000  00000388  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000003c4  00000000  00000000  00000910  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000336  00000000  00000000  00000cd4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000044  00000000  00000000  0000100c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000324  00000000  00000000  00001050  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000168  00000000  00000000  00001374  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000020  00000000  00000000  000014dc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	21 c0       	rjmp	.+66     	; 0x46 <__bad_interrupt>
+   4:	20 c0       	rjmp	.+64     	; 0x46 <__bad_interrupt>
+   6:	1f c0       	rjmp	.+62     	; 0x46 <__bad_interrupt>
+   8:	1e c0       	rjmp	.+60     	; 0x46 <__bad_interrupt>
+   a:	1d c0       	rjmp	.+58     	; 0x46 <__bad_interrupt>
+   c:	1c c0       	rjmp	.+56     	; 0x46 <__bad_interrupt>
+   e:	1b c0       	rjmp	.+54     	; 0x46 <__bad_interrupt>
+  10:	1a c0       	rjmp	.+52     	; 0x46 <__bad_interrupt>
+  12:	19 c0       	rjmp	.+50     	; 0x46 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+
+0000001c <__do_copy_data>:
+  1c:	10 e0       	ldi	r17, 0x00	; 0
+  1e:	a0 e6       	ldi	r26, 0x60	; 96
+  20:	b0 e0       	ldi	r27, 0x00	; 0
+  22:	e2 e5       	ldi	r30, 0x52	; 82
+  24:	f2 e0       	ldi	r31, 0x02	; 2
+  26:	02 c0       	rjmp	.+4      	; 0x2c <__do_copy_data+0x10>
+  28:	05 90       	lpm	r0, Z+
+  2a:	0d 92       	st	X+, r0
+  2c:	a4 36       	cpi	r26, 0x64	; 100
+  2e:	b1 07       	cpc	r27, r17
+  30:	d9 f7       	brne	.-10     	; 0x28 <__do_copy_data+0xc>
+
+00000032 <__do_clear_bss>:
+  32:	20 e0       	ldi	r18, 0x00	; 0
+  34:	a4 e6       	ldi	r26, 0x64	; 100
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	01 c0       	rjmp	.+2      	; 0x3c <.do_clear_bss_start>
+
+0000003a <.do_clear_bss_loop>:
+  3a:	1d 92       	st	X+, r1
+
+0000003c <.do_clear_bss_start>:
+  3c:	a0 37       	cpi	r26, 0x70	; 112
+  3e:	b2 07       	cpc	r27, r18
+  40:	e1 f7       	brne	.-8      	; 0x3a <.do_clear_bss_loop>
+  42:	0e d0       	rcall	.+28     	; 0x60 <main>
+  44:	04 c1       	rjmp	.+520    	; 0x24e <_exit>
+
+00000046 <__bad_interrupt>:
+  46:	dc cf       	rjmp	.-72     	; 0x0 <__vectors>
+
+00000048 <adc_setup>:
+
+
+void adc_setup (void)
+{
+	// Set the ADC input to PB2/ADC1
+	ADMUX |= (1 << MUX0);
+  48:	38 9a       	sbi	0x07, 0	; 7
+	ADMUX |= (1 << ADLAR);
+  4a:	3d 9a       	sbi	0x07, 5	; 7
+
+	// Set the prescaler to clock/128 & enable ADC
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (0 << ADPS0) | (1 << ADEN);
+  4c:	86 b1       	in	r24, 0x06	; 6
+  4e:	86 68       	ori	r24, 0x86	; 134
+  50:	86 b9       	out	0x06, r24	; 6
+  52:	08 95       	ret
+
+00000054 <adc_read>:
+}
+
+int adc_read (void)
+{
+	// Start the conversion
+	ADCSRA |= (1 << ADSC);
+  54:	36 9a       	sbi	0x06, 6	; 6
+
+	// Wait for it to finish
+	while (ADCSRA & (1 << ADSC));
+  56:	36 99       	sbic	0x06, 6	; 6
+  58:	fe cf       	rjmp	.-4      	; 0x56 <adc_read+0x2>
+
+	return ADCH;
+  5a:	85 b1       	in	r24, 0x05	; 5
+}
+  5c:	90 e0       	ldi	r25, 0x00	; 0
+  5e:	08 95       	ret
+
+00000060 <main>:
+long timeout_batt = 0;
+long tiempo_inc = 0;
+
+int main(void)
+{
+	PORTB = 0x20;  //bit 5 para regulador modem
+  60:	80 e2       	ldi	r24, 0x20	; 32
+  62:	88 bb       	out	0x18, r24	; 24
+	DDRB =  0x3B;  //
+  64:	8b e3       	ldi	r24, 0x3B	; 59
+  66:	87 bb       	out	0x17, r24	; 23
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  68:	2f ef       	ldi	r18, 0xFF	; 255
+  6a:	3b e4       	ldi	r19, 0x4B	; 75
+  6c:	8d e1       	ldi	r24, 0x1D	; 29
+  6e:	21 50       	subi	r18, 0x01	; 1
+  70:	30 40       	sbci	r19, 0x00	; 0
+  72:	80 40       	sbci	r24, 0x00	; 0
+  74:	e1 f7       	brne	.-8      	; 0x6e <main+0xe>
+  76:	00 c0       	rjmp	.+0      	; 0x78 <main+0x18>
+  78:	00 00       	nop
+	_delay_ms (1000);	
+	adc_setup();
+  7a:	e6 df       	rcall	.-52     	; 0x48 <adc_setup>
+	PORTB =0x31;
+  7c:	81 e3       	ldi	r24, 0x31	; 49
+  7e:	88 bb       	out	0x18, r24	; 24
+  80:	9f ef       	ldi	r25, 0xFF	; 255
+  82:	2b e4       	ldi	r18, 0x4B	; 75
+  84:	3d e1       	ldi	r19, 0x1D	; 29
+  86:	91 50       	subi	r25, 0x01	; 1
+  88:	20 40       	sbci	r18, 0x00	; 0
+  8a:	30 40       	sbci	r19, 0x00	; 0
+  8c:	e1 f7       	brne	.-8      	; 0x86 <main+0x26>
+  8e:	00 c0       	rjmp	.+0      	; 0x90 <main+0x30>
+  90:	00 00       	nop
+	_delay_ms (1000);
+	PORTB =0x30;
+  92:	90 e3       	ldi	r25, 0x30	; 48
+  94:	98 bb       	out	0x18, r25	; 24
+  96:	9f ef       	ldi	r25, 0xFF	; 255
+  98:	2b e4       	ldi	r18, 0x4B	; 75
+  9a:	3d e1       	ldi	r19, 0x1D	; 29
+  9c:	91 50       	subi	r25, 0x01	; 1
+  9e:	20 40       	sbci	r18, 0x00	; 0
+  a0:	30 40       	sbci	r19, 0x00	; 0
+  a2:	e1 f7       	brne	.-8      	; 0x9c <main+0x3c>
+  a4:	00 c0       	rjmp	.+0      	; 0xa6 <__stack+0x7>
+  a6:	00 00       	nop
+	_delay_ms (1000);
+	PORTB =0x31;
+  a8:	88 bb       	out	0x18, r24	; 24
+// 	PORTB =0x11;
+// 	_delay_ms (1000);
+	//PORTB =0x13;
+ 	//_delay_ms (500);
+	//PORTB =0x13;
+		timeout_off = TIME;
+  aa:	0f 2e       	mov	r0, r31
+  ac:	f0 ea       	ldi	r31, 0xA0	; 160
+  ae:	6f 2e       	mov	r6, r31
+  b0:	f0 2d       	mov	r31, r0
+  b2:	0f 2e       	mov	r0, r31
+  b4:	f6 e8       	ldi	r31, 0x86	; 134
+  b6:	7f 2e       	mov	r7, r31
+  b8:	f0 2d       	mov	r31, r0
+  ba:	cc 24       	eor	r12, r12
+  bc:	c3 94       	inc	r12
+  be:	d1 2c       	mov	r13, r1
+			if ((read > 31) && (read_old > 31)) //30
+			{
+				timeout_off = TIME;
+				if (timeout_batt == 0)
+				{
+					PORTB = 0x11; 
+  c0:	0f 2e       	mov	r0, r31
+  c2:	f1 e1       	ldi	r31, 0x11	; 17
+  c4:	ff 2e       	mov	r15, r31
+  c6:	f0 2d       	mov	r31, r0
+			}
+			if (read <= 30)   //32
+			{
+				timeout_off --;
+				timeout_batt = TIME_BAT;
+				PORTB = 0x13; 
+  c8:	0f 2e       	mov	r0, r31
+  ca:	f3 e1       	ldi	r31, 0x13	; 19
+  cc:	3f 2e       	mov	r3, r31
+  ce:	f0 2d       	mov	r31, r0
+			}		
+		}
+
+		// Conmuta la salida del módulo a alimentación con bateria
+		PORTB = 0x1A; 
+  d0:	0f 2e       	mov	r0, r31
+  d2:	fa e1       	ldi	r31, 0x1A	; 26
+  d4:	4f 2e       	mov	r4, r31
+  d6:	f0 2d       	mov	r31, r0
+		// Espera 15 Segundos
+		_delay_ms(15000); //15000
+		// Corta la salida.
+		PORTB = 0x20;  //apagar regulador modem ojo
+  d8:	68 94       	set
+  da:	ee 24       	eor	r14, r14
+  dc:	e5 f8       	bld	r14, 5
+		//DDRB =  0x1B; //Z8
+		_delay_ms(2000);
+		PORTB = 0x01; 
+  de:	55 24       	eor	r5, r5
+  e0:	53 94       	inc	r5
+				}
+			}
+			if (read <= 30)   //32
+			{
+				timeout_off --;
+				timeout_batt = TIME_BAT;
+  e2:	0f 2e       	mov	r0, r31
+  e4:	f8 ee       	ldi	r31, 0xE8	; 232
+  e6:	8f 2e       	mov	r8, r31
+  e8:	f3 e0       	ldi	r31, 0x03	; 3
+  ea:	9f 2e       	mov	r9, r31
+  ec:	a1 2c       	mov	r10, r1
+  ee:	b1 2c       	mov	r11, r1
+  f0:	f0 2d       	mov	r31, r0
+		{
+			read_old = read;
+			read = adc_read();
+			if ((read > 31) && (read_old > 31)) //30
+			{
+				timeout_off = TIME;
+  f2:	06 2d       	mov	r16, r6
+  f4:	17 2d       	mov	r17, r7
+  f6:	dc 2d       	mov	r29, r12
+  f8:	cd 2d       	mov	r28, r13
+  fa:	01 c0       	rjmp	.+2      	; 0xfe <__stack+0x5f>
+	{
+		//PORTB = 0x11;
+		//DDRB =  0x1B;
+		while (adc_read() < 33)
+		{
+			PORTB = 0x20;
+  fc:	e8 ba       	out	0x18, r14	; 24
+	
+	while (1)
+	{
+		//PORTB = 0x11;
+		//DDRB =  0x1B;
+		while (adc_read() < 33)
+  fe:	aa df       	rcall	.-172    	; 0x54 <adc_read>
+ 100:	81 97       	sbiw	r24, 0x21	; 33
+ 102:	e4 f3       	brlt	.-8      	; 0xfc <__stack+0x5d>
+// 	PORTB =0x11;
+// 	_delay_ms (1000);
+	//PORTB =0x13;
+ 	//_delay_ms (500);
+	//PORTB =0x13;
+		timeout_off = TIME;
+ 104:	60 92 60 00 	sts	0x0060, r6	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 108:	70 92 61 00 	sts	0x0061, r7	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 10c:	c0 92 62 00 	sts	0x0062, r12	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 110:	d0 92 63 00 	sts	0x0063, r13	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+		while(timeout_off >= 1)
+ 114:	76 c0       	rjmp	.+236    	; 0x202 <__stack+0x163>
+		{
+			read_old = read;
+ 116:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <read>
+ 11a:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <read+0x1>
+ 11e:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <read+0x2>
+ 122:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <read+0x3>
+ 126:	80 93 68 00 	sts	0x0068, r24	; 0x800068 <read_old>
+ 12a:	90 93 69 00 	sts	0x0069, r25	; 0x800069 <read_old+0x1>
+ 12e:	a0 93 6a 00 	sts	0x006A, r26	; 0x80006a <read_old+0x2>
+ 132:	b0 93 6b 00 	sts	0x006B, r27	; 0x80006b <read_old+0x3>
+			read = adc_read();
+ 136:	8e df       	rcall	.-228    	; 0x54 <adc_read>
+ 138:	09 2e       	mov	r0, r25
+ 13a:	00 0c       	add	r0, r0
+ 13c:	aa 0b       	sbc	r26, r26
+ 13e:	bb 0b       	sbc	r27, r27
+ 140:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <read>
+ 144:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <read+0x1>
+ 148:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <read+0x2>
+ 14c:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <read+0x3>
+			if ((read > 31) && (read_old > 31)) //30
+ 150:	80 97       	sbiw	r24, 0x20	; 32
+ 152:	a1 05       	cpc	r26, r1
+ 154:	b1 05       	cpc	r27, r1
+ 156:	6c f1       	brlt	.+90     	; 0x1b2 <__stack+0x113>
+ 158:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <read_old>
+ 15c:	90 91 69 00 	lds	r25, 0x0069	; 0x800069 <read_old+0x1>
+ 160:	a0 91 6a 00 	lds	r26, 0x006A	; 0x80006a <read_old+0x2>
+ 164:	b0 91 6b 00 	lds	r27, 0x006B	; 0x80006b <read_old+0x3>
+ 168:	80 97       	sbiw	r24, 0x20	; 32
+ 16a:	a1 05       	cpc	r26, r1
+ 16c:	b1 05       	cpc	r27, r1
+ 16e:	0c f1       	brlt	.+66     	; 0x1b2 <__stack+0x113>
+			{
+				timeout_off = TIME;
+ 170:	00 93 60 00 	sts	0x0060, r16	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 174:	10 93 61 00 	sts	0x0061, r17	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 178:	d0 93 62 00 	sts	0x0062, r29	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 17c:	c0 93 63 00 	sts	0x0063, r28	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+				if (timeout_batt == 0)
+ 180:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <__data_end>
+ 184:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <__data_end+0x1>
+ 188:	a0 91 66 00 	lds	r26, 0x0066	; 0x800066 <__data_end+0x2>
+ 18c:	b0 91 67 00 	lds	r27, 0x0067	; 0x800067 <__data_end+0x3>
+ 190:	00 97       	sbiw	r24, 0x00	; 0
+ 192:	a1 05       	cpc	r26, r1
+ 194:	b1 05       	cpc	r27, r1
+ 196:	11 f4       	brne	.+4      	; 0x19c <__stack+0xfd>
+				{
+					PORTB = 0x11; 
+ 198:	f8 ba       	out	0x18, r15	; 24
+ 19a:	0b c0       	rjmp	.+22     	; 0x1b2 <__stack+0x113>
+				}
+				else
+				{
+					timeout_batt --;
+ 19c:	01 97       	sbiw	r24, 0x01	; 1
+ 19e:	a1 09       	sbc	r26, r1
+ 1a0:	b1 09       	sbc	r27, r1
+ 1a2:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <__data_end>
+ 1a6:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <__data_end+0x1>
+ 1aa:	a0 93 66 00 	sts	0x0066, r26	; 0x800066 <__data_end+0x2>
+ 1ae:	b0 93 67 00 	sts	0x0067, r27	; 0x800067 <__data_end+0x3>
+				}
+			}
+			if (read <= 30)   //32
+ 1b2:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <read>
+ 1b6:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <read+0x1>
+ 1ba:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <read+0x2>
+ 1be:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <read+0x3>
+ 1c2:	4f 97       	sbiw	r24, 0x1f	; 31
+ 1c4:	a1 05       	cpc	r26, r1
+ 1c6:	b1 05       	cpc	r27, r1
+ 1c8:	e4 f4       	brge	.+56     	; 0x202 <__stack+0x163>
+			{
+				timeout_off --;
+ 1ca:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 1ce:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 1d2:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 1d6:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+ 1da:	01 97       	sbiw	r24, 0x01	; 1
+ 1dc:	a1 09       	sbc	r26, r1
+ 1de:	b1 09       	sbc	r27, r1
+ 1e0:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 1e4:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 1e8:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 1ec:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+				timeout_batt = TIME_BAT;
+ 1f0:	80 92 64 00 	sts	0x0064, r8	; 0x800064 <__data_end>
+ 1f4:	90 92 65 00 	sts	0x0065, r9	; 0x800065 <__data_end+0x1>
+ 1f8:	a0 92 66 00 	sts	0x0066, r10	; 0x800066 <__data_end+0x2>
+ 1fc:	b0 92 67 00 	sts	0x0067, r11	; 0x800067 <__data_end+0x3>
+				PORTB = 0x13; 
+ 200:	38 ba       	out	0x18, r3	; 24
+// 	_delay_ms (1000);
+	//PORTB =0x13;
+ 	//_delay_ms (500);
+	//PORTB =0x13;
+		timeout_off = TIME;
+		while(timeout_off >= 1)
+ 202:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 206:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 20a:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <__DATA_REGION_ORIGIN__+0x2>
+ 20e:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <__DATA_REGION_ORIGIN__+0x3>
+ 212:	18 16       	cp	r1, r24
+ 214:	19 06       	cpc	r1, r25
+ 216:	1a 06       	cpc	r1, r26
+ 218:	1b 06       	cpc	r1, r27
+ 21a:	0c f4       	brge	.+2      	; 0x21e <__stack+0x17f>
+ 21c:	7c cf       	rjmp	.-264    	; 0x116 <__stack+0x77>
+				PORTB = 0x13; 
+			}		
+		}
+
+		// Conmuta la salida del módulo a alimentación con bateria
+		PORTB = 0x1A; 
+ 21e:	48 ba       	out	0x18, r4	; 24
+ 220:	8f ef       	ldi	r24, 0xFF	; 255
+ 222:	95 e3       	ldi	r25, 0x35	; 53
+ 224:	2e e6       	ldi	r18, 0x6E	; 110
+ 226:	31 e0       	ldi	r19, 0x01	; 1
+ 228:	81 50       	subi	r24, 0x01	; 1
+ 22a:	90 40       	sbci	r25, 0x00	; 0
+ 22c:	20 40       	sbci	r18, 0x00	; 0
+ 22e:	30 40       	sbci	r19, 0x00	; 0
+ 230:	d9 f7       	brne	.-10     	; 0x228 <__stack+0x189>
+ 232:	00 c0       	rjmp	.+0      	; 0x234 <__stack+0x195>
+ 234:	00 00       	nop
+		// Espera 15 Segundos
+		_delay_ms(15000); //15000
+		// Corta la salida.
+		PORTB = 0x20;  //apagar regulador modem ojo
+ 236:	e8 ba       	out	0x18, r14	; 24
+ 238:	8f ef       	ldi	r24, 0xFF	; 255
+ 23a:	97 e9       	ldi	r25, 0x97	; 151
+ 23c:	2a e3       	ldi	r18, 0x3A	; 58
+ 23e:	81 50       	subi	r24, 0x01	; 1
+ 240:	90 40       	sbci	r25, 0x00	; 0
+ 242:	20 40       	sbci	r18, 0x00	; 0
+ 244:	e1 f7       	brne	.-8      	; 0x23e <__stack+0x19f>
+ 246:	00 c0       	rjmp	.+0      	; 0x248 <__stack+0x1a9>
+ 248:	00 00       	nop
+		//DDRB =  0x1B; //Z8
+		_delay_ms(2000);
+		PORTB = 0x01; 
+ 24a:	58 ba       	out	0x18, r5	; 24
+	}
+ 24c:	58 cf       	rjmp	.-336    	; 0xfe <__stack+0x5f>
+
+0000024e <_exit>:
+ 24e:	f8 94       	cli
+
+00000250 <__stop_program>:
+ 250:	ff cf       	rjmp	.-2      	; 0x250 <__stop_program>

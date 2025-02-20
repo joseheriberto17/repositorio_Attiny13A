@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project>                                  
+  <executable name="Firmware_temporizador_RC9.elf">                 
+    <memory name="program">              
+      <units>bytes</units>                 
+      <length>1024</length>                 
+      <used>912</used>                     
+      <free>112</free>                     
+    </memory>                              
+    <memory name="data">                 
+      <units>bytes</units>                 
+      <length>64</length>                 
+      <used>28</used>                     
+      <free>36</free>                     
+    </memory>                              
+  </executable>                            
+</project>                                 
