@@ -4,7 +4,7 @@
 #define TIME 45000      // 45000 aproximadamente 5 segundos // 10.800.000 19 minutos con 40 segundos 10800000
 #define REST 5400000       // 1080000 aproximadamente 2 minutos // 540000 para 1 minuto
 #define LED_IGN PB3
-#define VOLT_OUT PB1 
+#define VOLT_OUT PB1
 #define TIME_PWM 50   ///4 milisegundos
 #define TIME_PULSOS 2160000 // 3 minutos
 
@@ -15,21 +15,22 @@
 //PB4 ENTRDA SEÑAL DE VIDA
 //PB5 RESET
 
-
 void adc_setup(void) {
-    // Set the ADC input to PB2/ADC1
-    ADMUX |= (1 << MUX0);
-    ADMUX |= (1 << ADLAR);
-    // Set the prescaler to clock/128 & enable ADC
-    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (0 << ADPS0) | (1 << ADEN);
+	// Set the ADC input to PB2/ADC1
+	ADMUX |= (1 << MUX0);  // Canal de lectura en PB2 (ADC1)
+	// Desactivar ADLAR para lectura de 10 bits (lectura normal sin ajuste de izquierda)
+	ADMUX &= ~(1 << ADLAR);
+	// Set the prescaler to clock/128 & enable ADC
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (0 << ADPS0) | (1 << ADEN);
 }
 
 int adc_read(void) {
-    // Start the conversion
-    ADCSRA |= (1 << ADSC);
-    // Wait for it to finish 
-    while (ADCSRA & (1 << ADSC));
-    return ADCH;
+	// Start the conversion
+	ADCSRA |= (1 << ADSC);
+	// Wait for it to finish
+	while (ADCSRA & (1 << ADSC));
+	// Return the 10-bit result (combine ADCL and ADCH)
+	return ADC; // ADC contiene el valor combinado de ADCL y ADCH
 }
 
 long time_alive = TIME_PULSOS;
@@ -43,38 +44,41 @@ unsigned short int pin_vida = 0;// SEÑAL DE VIDA, PERRO GUARDIAR QUE ASEGURA QUE
 unsigned short int pin_vida_old = 0;// SEÑAL DE VIDA, PERRO GUARDIAR QUE ASEGURA QUE EL CORE SE ENCUENTRA SIEMPRE FUNCIONANDO
 unsigned short int counter_flag = 5000;
 
+	//Fomrula para conocer el voltaje: V = (valor_ref * (2/39.4) * (3.3/1023)) + 0.4
+	// valor_ref = valor que se desea encontrar para que sea leído por el adc.
+	// 0.6V = Voltaje de caída del diodo
 
 int main(void) {
 
-    ignition_on = 0;
-    PORTB = 0x00;
-    DDRB = 0x0A; // SALIDAS PORTB3 (LED) Y PORTB1 CONMUTACION VOLTAJE
-    adc_setup();
-	  
-    while (1) //CICLO INFINITO DE PROGRAMA
-    {
-        in_ignition = (PINB & 0X01);
+	ignition_on = 0;
+	PORTB = 0x00;
+	DDRB = 0x0A; // SALIDAS PORTB3 (LED) Y PORTB1 CONMUTACION VOLTAJE
+	adc_setup();
+	
+	while (1) //CICLO INFINITO DE PROGRAMA
+	{
+		in_ignition = (PINB & 0X01);
 
-        while (adc_read() < 10 || (in_ignition == 1)) // VOLTAJE SUPERIOR A REFERENCIA Y IGNICION ACTIVA PARA SEGUIR //32 //17
-        {
-          _delay_ms(300);
-		  in_ignition = (PINB & 0X01);
-		  PORTB &= ~(1 << VOLT_OUT);
-	    }
+		while (adc_read() < 95 || (in_ignition == 1)) // VOLTAJE SUPERIOR A REFERENCIA Y IGNICION ACTIVA PARA SEGUIR //32 //17
+		{
+			_delay_ms(300);
+			in_ignition = (PINB & 0X01);
+			PORTB &= ~(1 << VOLT_OUT);
+		}
 
-        ignition_on = TIME;    //UN MINUTOS
-        ignition_off = REST;  //5 SEGUNDOS
-        timeout_off = TIME;   // 5 SEGUNDOS
+		ignition_on = TIME;    //UN MINUTOS
+		ignition_off = REST;  //5 SEGUNDOS
+		timeout_off = TIME;   // 5 SEGUNDOS
 
 		while (timeout_off >= 1)
-		{		
-
-	if (!PORTB & (1 << VOLT_OUT))
 		{
-			counter_flag = 0x00;
-			time_alive = TIME_PULSOS;
-			time_read_pin = TIME_PWM;
-		}
+
+			if (!PORTB & (1 << VOLT_OUT))
+			{
+				counter_flag = 0x00;
+				time_alive = TIME_PULSOS;
+				time_read_pin = TIME_PWM;
+			}
 			time_alive--;
 			time_read_pin--;
 			if (time_read_pin == 0)
@@ -83,11 +87,11 @@ int main(void) {
 				pin_vida = (PINB & 0X10);
 				time_read_pin = TIME_PWM;
 				if ((pin_vida_old == 0x00) && (pin_vida == 0x10))
-					{
-						counter_flag++;
-					}
+				{
+					counter_flag++;
+				}
 			}
-		
+			
 			if (time_alive == 0)
 			{
 				time_alive = TIME_PULSOS;
@@ -98,61 +102,62 @@ int main(void) {
 				}
 				else
 				{
-				PORTB &= ~(1 << VOLT_OUT);
-				_delay_ms(12000);
-				if (PORTB & (1 << LED_IGN)) 
-				{
-				PORTB |= (1 << VOLT_OUT);
-				}
-				counter_flag = 0x00;
-				}
-			}		
+					PORTB &= ~(1 << VOLT_OUT);
+					_delay_ms(12000);
 					
-            read = adc_read(); // ACTUALIZA NUEVO VALOR DE LECTURA
-						
-            if (read > 10)  // SI EL ESTADO ACTUAL Y EL ANTERIOR SON MAYORES A LA REFERENCIA ACTUALIZA TIMEOUT //32//17
-            {
-                in_ignition = (PINB & 0X01);
-		
-                if (in_ignition == 1) // SI IGNITION ESTA ACTIVA VERIFICA QUE PERMANEZCA ACTIVA POR 5 SEGUNDOS 
-                {
-                    ignition_on = TIME; //BORRAR
+					if (PORTB & (1 << LED_IGN))
+					{
+						PORTB |= (1 << VOLT_OUT);
+					}
+					counter_flag = 0x00;
+				}
+			}
+			
+			read = adc_read(); // ACTUALIZA NUEVO VALOR DE LECTURA
+			
+			if (read > 96)  // SI EL ESTADO ACTUAL Y EL ANTERIOR SON MAYORES A LA REFERENCIA ACTUALIZA TIMEOUT //32//17
+			{
+				in_ignition = (PINB & 0X01);
+				
+				if (in_ignition == 1) // SI IGNITION ESTA ACTIVA VERIFICA QUE PERMANEZCA ACTIVA POR 5 SEGUNDOS
+				{
+					ignition_on = TIME; //BORRAR
 					if (ignition_off < 5355000)
-                    {
+					{
 						PORTB &= ~(1 << LED_IGN);
-                    }
-					if (ignition_off == 0) 
-                    {
-                        timeout_off = TIME;
+					}
+					if (ignition_off == 0)
+					{
+						timeout_off = TIME;
 						PORTB &= ~(1 << VOLT_OUT);
-                    }
-                    else 
-                    {
+					}
+					else
+					{
 						ignition_off--;
-                    }
-                }
-                else 
-                {
+					}
+				}
+				else
+				{
 					ignition_off = REST;
 					if (ignition_on == 0)
-                    {
+					{
 						PORTB |= (1 << LED_IGN);
 						PORTB |= (1 << VOLT_OUT);
-						//_delay_ms(50000);				
-                    }
-                    else
-                    {
+						//_delay_ms(50000);
+					}
+					else
+					{
 						ignition_on--;
-                    }
-                }
-            }
-            else
-            {
-                timeout_off--;
-            }
-        }
-        PORTB &= ~(1 << LED_IGN);
-        PORTB &= ~(1 << VOLT_OUT);
-    }
+					}
+				}
+			}
+			else
+			{
+				timeout_off--;
+			}
+		}
+		PORTB &= ~(1 << LED_IGN);
+		PORTB &= ~(1 << VOLT_OUT);
+	}
 
 }
